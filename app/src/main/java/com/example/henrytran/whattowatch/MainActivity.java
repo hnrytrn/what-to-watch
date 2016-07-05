@@ -24,6 +24,8 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static ImageAdapter mImageAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         GridView gridView = (GridView) findViewById(R.id.gridview);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setAdapter(mImageAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -133,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+
+
 
             return null;
         }
