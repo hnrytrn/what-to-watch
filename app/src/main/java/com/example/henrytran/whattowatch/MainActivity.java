@@ -1,12 +1,9 @@
 package com.example.henrytran.whattowatch;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +20,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static ImageAdapter mImageAdapter;
 
@@ -50,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    /*    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
     }
 
     @Override
@@ -80,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FetchMovieTask fetchMovieTask = new FetchMovieTask();
+        fetchMovieTask.execute();
     }
 
     public class FetchMovieTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
@@ -175,8 +178,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
+            try {
+                return getMovieDataFromJson(moviesJsonStr);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Movie> movies) {
+            if (!movies.isEmpty()) {
+                mImageAdapter.clear();
+
+                int moviesSize = movies.size();
+                Movie[] movieArr = new Movie[moviesSize];
+                movies.toArray(movieArr);
+
+                for(int i=0; i < moviesSize; i++) {
+                    mImageAdapter.add(movieArr[i]);
+                }
+            }
         }
     }
 }

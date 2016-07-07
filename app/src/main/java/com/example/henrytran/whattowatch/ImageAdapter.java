@@ -1,7 +1,6 @@
 package com.example.henrytran.whattowatch;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
 
         String posterURL = baseUrl + posterSize + movie.posterPath;
 
-        Picasso.with(MainActivity.this)
+        Picasso.with(this.getContext())
                 .load(posterURL)
                 //.placeholder(R.raw.placeholder)
                 //.error(R.raw.error)
