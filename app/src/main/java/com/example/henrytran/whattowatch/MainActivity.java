@@ -36,6 +36,8 @@ public class MainActivity extends Activity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
+        mImageAdapter = new ImageAdapter(this, new ArrayList<Movie>());
+
         GridView gridView = (GridView) findViewById(R.id.gridview);
         gridView.setAdapter(mImageAdapter);
 

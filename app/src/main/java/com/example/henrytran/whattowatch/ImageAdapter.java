@@ -1,10 +1,10 @@
 package com.example.henrytran.whattowatch;
 
-import android.app.Activity;
-import android.view.LayoutInflater;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -16,8 +16,11 @@ import java.util.List;
  */
 public class ImageAdapter extends ArrayAdapter<Movie> {
 
-    public ImageAdapter(Activity context, List<Movie> movieList) {
+    private Context mContext;
+
+    public ImageAdapter(Context context, List<Movie> movieList) {
         super(context, 0, movieList);
+        mContext = context;
     }
 
     @Override
@@ -25,13 +28,15 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
 
         Movie movie = getItem(position);
 
-        //If this is a new view object then inflate the layout
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.movie_item,parent,false);
-        }
+        ImageView imageView;
 
-        ImageView imageView = (ImageView) convertView;
+        if (convertView == null) {
+            imageView = new ImageView(mContext);
+            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
+            imageView = (ImageView) convertView;
+        }
 
         //construct the url to the movie poster
         String baseUrl = "http://image.tmdb.org/t/p/";
@@ -46,6 +51,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
                 .noFade().resize(150, 150)
                 .centerCrop()
                 .into(imageView);
+
         return imageView;
     }
 }
