@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by henrytran on 16-07-02.
@@ -18,7 +18,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
 
     private Context mContext;
 
-    public ImageAdapter(Context context, List<Movie> movieList) {
+    public ImageAdapter(Context context, ArrayList<Movie> movieList) {
         super(context, 0, movieList);
         mContext = context;
     }
@@ -32,7 +32,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
 
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
+            imageView.setLayoutParams(new GridView.LayoutParams(720, 720));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
             imageView = (ImageView) convertView;
@@ -48,7 +48,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
                 .load(posterURL)
                 //.placeholder(R.raw.placeholder)
                 //.error(R.raw.error)
-                .noFade().resize(150, 150)
+                .noFade().resize(400, 400)
                 .centerCrop()
                 .into(imageView);
 
