@@ -43,7 +43,7 @@ public class MovieListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_fragment, menu);
     }
 
     @Override
@@ -51,8 +51,11 @@ public class MovieListFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_popular) {
+            loadMovies("popular");
             return true;
+        } else if (id == R.id.action_rated) {
+            loadMovies("top_rated");
         }
 
         return super.onOptionsItemSelected(item);
@@ -78,11 +81,15 @@ public class MovieListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FetchMovieTask fetchMovieTask = new FetchMovieTask();
-        fetchMovieTask.execute();
+        loadMovies("popular");
     }
 
-    public class FetchMovieTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
+    private void loadMovies(String type) {
+        FetchMovieTask fetchMovieTask = new FetchMovieTask();
+        fetchMovieTask.execute(type);
+    }
+
+    public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 
@@ -120,7 +127,7 @@ public class MovieListFragment extends Fragment {
         }
 
         @Override
-        protected ArrayList<Movie> doInBackground(Void... params) {
+        protected ArrayList<Movie> doInBackground(String... params) {
             HttpURLConnection urlConnection =  null;
             BufferedReader reader = null;
 
@@ -129,8 +136,12 @@ public class MovieListFragment extends Fragment {
 
             try {
                 //construct the URL to fetch the popular movies from the movie db
-                final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/popular";
+                String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/";
                 final String API_PARAM = "api_key";
+                //append the param for what the user wants to see in the base url
+                if (params[0] == "popular"  || params[0] == "top_rated") {
+                    MOVIE_BASE_URL += params[0];
+                }
 
                 Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                         .appendQueryParameter(API_PARAM, BuildConfig.MOVIE_DB_API_KEY)
