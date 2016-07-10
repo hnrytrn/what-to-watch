@@ -32,8 +32,7 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
 
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(720, 720));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setLayoutParams(new GridView.LayoutParams(720, 1050));
         } else {
             imageView = (ImageView) convertView;
         }
@@ -44,11 +43,11 @@ public class ImageAdapter extends ArrayAdapter<Movie> {
 
         String posterURL = baseUrl + posterSize + movie.posterPath;
 
-        Picasso.with(this.getContext())
+        Picasso.with(getContext())
                 .load(posterURL)
                 //.placeholder(R.raw.placeholder)
                 //.error(R.raw.error)
-                .noFade().resize(400, 400)
+                .noFade().resize(720, 1050)
                 .centerCrop()
                 .into(imageView);
 
