@@ -1,15 +1,16 @@
 package com.example.henrytran.whattowatch;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,21 +47,6 @@ public class MovieListFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_popular) {
-            loadMovies("popular");
-            return true;
-        } else if (id == R.id.action_rated) {
-            loadMovies("top_rated");
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movielist, container, false);
 
@@ -84,12 +70,17 @@ public class MovieListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        loadMovies("popular");
+        loadMovies();
     }
 
-    private void loadMovies(String type) {
+    private void loadMovies() {
+        //get the sort preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortPref = prefs.getString(getString(R.string.pref_sort_key),
+                getString(R.string.pref_sort_default));
+
         FetchMovieTask fetchMovieTask = new FetchMovieTask();
-        fetchMovieTask.execute(type);
+        fetchMovieTask.execute(sortPref);
     }
 
     public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movie>> {
@@ -142,7 +133,7 @@ public class MovieListFragment extends Fragment {
                 String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/";
                 final String API_PARAM = "api_key";
                 //append the param for what the user wants to see in the base url
-                if (params[0] == "popular"  || params[0] == "top_rated") {
+                if (params[0].equals("popular")  || params[0].equals("top_rated")) {
                     MOVIE_BASE_URL += params[0];
                 }
 

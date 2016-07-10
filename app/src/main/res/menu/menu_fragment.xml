@@ -3,14 +3,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.henrytran.whattowatch.MovieListFragment">
-    <item
-        android:id="@+id/action_popular"
-        android:title="Popular Movies"
-        app:showAsAction="never">
-    </item>
-    <item
-        android:id="@+id/action_rated"
-        android:title="Top Rated Movies"
-        app:showAsAction="never">
-    </item>
 </menu>
