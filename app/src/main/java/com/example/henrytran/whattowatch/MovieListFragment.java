@@ -74,7 +74,8 @@ public class MovieListFragment extends Fragment {
                 Movie movie = mImageAdapter.getItem(position);
 
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.)
+                        .putExtra("movieTag", movie);
+                startActivity(detailIntent);
             }
         });
         return rootView;
