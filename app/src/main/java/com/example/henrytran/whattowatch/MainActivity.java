@@ -1,7 +1,9 @@
 package com.example.henrytran.whattowatch;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,20 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onStart() {
+       super.onStart();
+        //set the menu title to the sort preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String sortPref = prefs.getString(getString(R.string.pref_sort_key),
+                getString(R.string.pref_sort_default));
+        if (sortPref.equals("popular")) {
+            setTitle("Popular Movies");
+        } else if (sortPref.equals("top_rated")) {
+            setTitle("Top Rated Movies");
+        }
     }
 
     @Override
